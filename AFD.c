@@ -197,10 +197,24 @@ void processarPalavras(AFD *afd){
     }
 }
 
-void processarTransicoes(AFD *afd){
-    // Aqui você pode implementar a lógica para processar as transições do AFD
-    // Isso envolveria criar uma estrutura de dados para armazenar as transições de forma eficiente, como uma tabela de transição, e depois usar essa tabela para simular o comportamento do AFD.
-}
+void processarTransicoes(AFD *afd, char *estadoAtual, char simbolo, char *estadoDestino){
+    char s_simbolo[2] = {simbolo, '\0'}; // Converte char para string para comparar
+    
+    for(int i=0; i < afd->qtd_transicoes; i++) {
+        char copia[TAM_TRANSICOES];
+        strcpy(copia, afd->transicoes[i]);
+        
+        char *origem = strtok(copia, " ");
+        char *lido = strtok(NULL, " ");
+        char *destino = strtok(NULL, " ");
+        
+        // Verifica se a transição serve para o estado atual e o símbolo lido
+        if(strcmp(origem, estadoAtual) == 0 && strcmp(lido, s_simbolo) == 0) {
+            strcpy(estadoDestino, destino);
+            return 1; // Sucesso
+        }
+    }
+    return 0;}
 
 int main(){
     ListaDeLinhas entrada;
