@@ -6,12 +6,32 @@
 // Definindo limites
 #define MAX_LINHAS 100
 #define TAM_LINHAS 256
+#define MAX_ALFABETO 50
+#define TAM_ALFABETO 50 
+#define MAX_ESTADOS 50
+#define TAM_ESTADOS 50
+#define TAM_ESTADO_INICIAL 50
+#define TAM_ESTADOS_FINAIS 50
+#define MAX_ESTADOS_FINAIS 50   
+#define MAX_TRANSICOES 100
+#define TAM_TRANSICOES 100
+#define MAX_PALAVRAS 100
+#define TAM_PALAVRAS 100
 
 //Para armazenar as linhas
 typedef struct{
     char texto[MAX_LINHAS][TAM_LINHAS]; //matriz
     int qtd; //qtd de linhas
 }ListaDeLinhas;
+
+typedef struct{
+    char alfabeto[MAX_ALFABETO][TAM_ALFABETO];
+    char estados[MAX_ESTADOS][TAM_ESTADOS];
+    char estado_inicial[TAM_ESTADO_INICIAL];
+    char estados_finais[MAX_ESTADOS_FINAIS][TAM_ESTADOS_FINAIS];
+    char transicoes  [MAX_TRANSICOES][TAM_TRANSICOES];
+    char palavras[MAX_PALAVRAS][TAM_PALAVRAS];
+}AFD
 
 //Função que lê o arquivo, ignora as linhas com '#' e armazena as outras no struct
 void carregarArquivo(const char *Nomearquivo, ListaDeLinhas *lista){
@@ -41,6 +61,11 @@ void imprimeLinhas(ListaDeLinhas *lista){
     for(int i=0; i<lista->qtd; i++){
         printf("%s", lista->texto[i]);
     }
+}
+
+processararAFD(ListaDeLinhas *lista){
+    // Aqui você pode implementar a lógica para processar as linhas do AFD
+    // Por exemplo, você pode criar uma estrutura para representar o AFD e preencher essa estrutura com base nas linhas lidas
 }
 
 int main(){
