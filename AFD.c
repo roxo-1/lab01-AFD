@@ -31,7 +31,7 @@ typedef struct{
     char estados_finais[MAX_ESTADOS_FINAIS][TAM_ESTADOS_FINAIS];
     char transicoes  [MAX_TRANSICOES][TAM_TRANSICOES];
     char palavras[MAX_PALAVRAS][TAM_PALAVRAS];
-}AFD
+}AFD;
 
 //Função que lê o arquivo, ignora as linhas com '#' e armazena as outras no struct
 void carregarArquivo(const char *Nomearquivo, ListaDeLinhas *lista){
