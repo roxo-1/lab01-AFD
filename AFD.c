@@ -26,11 +26,16 @@ typedef struct{
 
 typedef struct{
     char alfabeto[MAX_ALFABETO][TAM_ALFABETO];
+    int tamanho_alfabeto;
     char estados[MAX_ESTADOS][TAM_ESTADOS];
-    char estado_inicial[TAM_ESTADO_INICIAL];
+    int tamanho_estados;
+    char estado_inicial;
     char estados_finais[MAX_ESTADOS_FINAIS][TAM_ESTADOS_FINAIS];
+    int qtd_estados_finais;
     char transicoes  [MAX_TRANSICOES][TAM_TRANSICOES];
+    int qtd_transicoes;
     char palavras[MAX_PALAVRAS][TAM_PALAVRAS];
+    int qtd_palavras;
 }AFD;
 
 //Função que lê o arquivo, ignora as linhas com '#' e armazena as outras no struct
@@ -63,9 +68,14 @@ void imprimeLinhas(ListaDeLinhas *lista){
     }
 }
 
-processararAFD(ListaDeLinhas *lista){
+processararAFD(ListaDeLinhas *lista, AFD *afd){
     // Aqui você pode implementar a lógica para processar as linhas do AFD
     // Por exemplo, você pode criar uma estrutura para representar o AFD e preencher essa estrutura com base nas linhas lidas
+    char buffer[TAM_LINHAS];
+    while(fgets(buffer, TAM_LINHAS, lista) != NULL){
+        if(buffer[0]=='A'){
+            strcpy(afd->alfabeto,buffer);
+        }
 }
 
 int main(){
