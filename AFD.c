@@ -172,8 +172,29 @@ void imprimeAFD(AFD *afd){
 }
 
 void processarPalavras(AFD *afd){
-    // Aqui você pode implementar a lógica para processar as palavras usando o AFD
-    // Isso envolveria criar uma função que simula o AFD para cada palavra, verificando se ela é aceita ou rejeitada com base nas transições e estados finais.
+    for(int i=0; i < afd->qtd_palavras; i++) {
+        char estadoAtual[TAM_ESTADOS];
+        strcpy(estadoAtual, afd->estado_inicial); // Começa no estado inicial [cite: 9]
+        int rejeitada = 0;
+        char *palavra = afd->palavras[i];
+        // Loop letra por letra da palavra
+        for(int j=0; j < strlen(palavra); j++) {
+            char proximoEstado[TAM_ESTADOS];
+            if(obterProximoEstado(afd, estadoAtual, palavra[j], proximoEstado)) {
+                strcpy(estadoAtual, proximoEstado); // Avança
+            } else {
+                rejeitada = 1; // Não há transição definida para este símbolo
+                break;
+            }
+        }
+        // Ao final da palavra, verifica se parou em um estado final
+        if(!rejeitada && ehEstadoFinal(afd, estadoAtual)) {
+            // Formato de saída exigido no PDF 
+            printf("M aceita a palavra <%s>\n", palavra);
+        } else {
+            printf("M rejeita a palavra <%s>\n", palavra);
+        }
+    }
 }
 
 void processarTransicoes(AFD *afd){
