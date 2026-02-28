@@ -14,7 +14,7 @@ typedef struct{
 }ListaDeLinhas;
 
 //Função que lê o arquivo, ignora as linhas com '#' e armazena as outras no struct
-void lerArquivo(const char *Nomearquivo, ListaDeLinhas *lista){
+void carregarArquivo(const char *Nomearquivo, ListaDeLinhas *lista){
     FILE *arquivo = fopen(Nomearquivo, "r");
     lista->qtd =0;
     if(arquivo==NULL){
@@ -37,8 +37,15 @@ void lerArquivo(const char *Nomearquivo, ListaDeLinhas *lista){
     fclose(arquivo);
 }
 
+void imprimeLinhas(ListaDeLinhas *lista){
+    for(int i=0; i<lista->qtd; i++){
+        printf("%s", lista->texto[i]);
+    }
+}
+
 int main(){
     ListaDeLinhas entrada;
-    lerArquivo("entradaAFD.txt", &entrada);
+    carregarArquivo("entradaAFD.txt", &entrada);
+    imprimeLinhas(&entrada);
     return 0;
 }
