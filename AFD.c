@@ -171,33 +171,7 @@ void imprimeAFD(AFD *afd){
     printf("\n");
 }
 
-void processarPalavras(AFD *afd){
-    for(int i=0; i < afd->qtd_palavras; i++) {
-        char estadoAtual[TAM_ESTADOS];
-        strcpy(estadoAtual, afd->estado_inicial); // Começa no estado inicial [cite: 9]
-        int rejeitada = 0;
-        char *palavra = afd->palavras[i];
-        // Loop letra por letra da palavra
-        for(int j=0; j < strlen(palavra); j++) {
-            char proximoEstado[TAM_ESTADOS];
-            if(obterProximoEstado(afd, estadoAtual, palavra[j], proximoEstado)) {
-                strcpy(estadoAtual, proximoEstado); // Avança
-            } else {
-                rejeitada = 1; // Não há transição definida para este símbolo
-                break;
-            }
-        }
-        // Ao final da palavra, verifica se parou em um estado final
-        if(!rejeitada && ehEstadoFinal(afd, estadoAtual)) {
-            // Formato de saída exigido no PDF 
-            printf("M aceita a palavra <%s>\n", palavra);
-        } else {
-            printf("M rejeita a palavra <%s>\n", palavra);
-        }
-    }
-}
-
-void processarTransicoes(AFD *afd, char *estadoAtual, char simbolo, char *estadoDestino){
+int processarTransicoes(AFD *afd, char *estadoAtual, char simbolo, char *estadoDestino){
     char s_simbolo[2] = {simbolo, '\0'}; // Converte char para string para comparar
     
     for(int i=0; i < afd->qtd_transicoes; i++) {
@@ -226,12 +200,40 @@ int ehEstadoFinal(AFD *afd, char *estado) {
     return 0;
 }
 
+void processarPalavras(AFD *afd){
+    for(int i=0; i < afd->qtd_palavras; i++) {
+        char estadoAtual[TAM_ESTADOS];
+        strcpy(estadoAtual, afd->estado_inicial); // Começa no estado inicial [cite: 9]
+        int rejeitada = 0;
+        char *palavra = afd->palavras[i];
+        // Loop letra por letra da palavra
+        for(int j=0; j < strlen(palavra); j++) {
+            char proximoEstado[TAM_ESTADOS];
+            if(processarTransicoes(afd, estadoAtual, palavra[j], proximoEstado)) {
+                strcpy(estadoAtual, proximoEstado); // Avança
+            } else {
+                rejeitada = 1; // Não há transição definida para este símbolo
+                break;
+            }
+        }
+        // Ao final da palavra, verifica se parou em um estado final
+        if(!rejeitada && ehEstadoFinal(afd, estadoAtual)) {
+            // Formato de saída exigido no PDF 
+            printf("M aceita a palavra <%s>\n", palavra);
+        } else {
+            printf("M rejeita a palavra <%s>\n", palavra);
+        }
+    }
+}
+
+
 int main(){
     ListaDeLinhas entrada;
     AFD afd;
     carregarArquivo("entradaAFD.txt", &entrada);
     //imprimeLinhas(&entrada);
     processararAFD(&entrada, &afd);
-    imprimeAFD(&afd);
+    //imprimeAFD(&afd);
+    processarPalavras(&afd);
     return 0;
 }
