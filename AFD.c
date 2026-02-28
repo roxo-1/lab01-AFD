@@ -6,15 +6,16 @@
 // Definindo limites
 #define MAX_LINHAS 100
 #define TAM_LINHAS 256
+
 #define MAX_ALFABETO 50
 #define TAM_ALFABETO 50 
+
 #define MAX_ESTADOS 50
-#define TAM_ESTADOS 50
-#define TAM_ESTADO_INICIAL 50
-#define TAM_ESTADOS_FINAIS 50
-#define MAX_ESTADOS_FINAIS 50   
+#define TAM_ESTADOS 50 
+
 #define MAX_TRANSICOES 100
 #define TAM_TRANSICOES 100
+
 #define MAX_PALAVRAS 100
 #define TAM_PALAVRAS 100
 
@@ -26,16 +27,11 @@ typedef struct{
 
 typedef struct{
     char alfabeto[MAX_ALFABETO][TAM_ALFABETO];
-    int tamanho_alfabeto;
     char estados[MAX_ESTADOS][TAM_ESTADOS];
-    int tamanho_estados;
-    char estado_inicial;
-    char estados_finais[MAX_ESTADOS_FINAIS][TAM_ESTADOS_FINAIS];
-    int qtd_estados_finais;
-    char transicoes  [MAX_TRANSICOES][TAM_TRANSICOES];
-    int qtd_transicoes;
+    char estado_inicial[MAX_ESTADOS][TAM_ESTADOS];
+    char estados_finais[MAX_ESTADOS][TAM_ESTADOS];
+    char transicoes[MAX_TRANSICOES][TAM_TRANSICOES];
     char palavras[MAX_PALAVRAS][TAM_PALAVRAS];
-    int qtd_palavras;
 }AFD;
 
 //Função que lê o arquivo, ignora as linhas com '#' e armazena as outras no struct
@@ -69,14 +65,27 @@ void imprimeLinhas(ListaDeLinhas *lista){
 }
 
 processararAFD(ListaDeLinhas *lista, AFD *afd){
-    // Aqui você pode implementar a lógica para processar as linhas do AFD
-    // Por exemplo, você pode criar uma estrutura para representar o AFD e preencher essa estrutura com base nas linhas lidas
     char buffer[TAM_LINHAS];
     while(fgets(buffer, TAM_LINHAS, lista) != NULL){
         if(buffer[0]=='A'){
             strcpy(afd->alfabeto,buffer);
+        }else if(buffer[0]=='Q'){
+            strcpy(afd->estados,buffer);
+        }else if(buffer[0]=='q'){
+            afd->estado_inicial = buffer[0];
+        }else if(buffer[0]=='F'){
+            strcpy(afd->estados_finais,buffer);
+        }else if(buffer[0]=='T'){
+            strcpy(afd->transicoes,buffer); 
+        }else if(buffer[0]=='P'){
+            strcpy(afd->palavras,buffer);
+        } else{
+            printf("Linha não reconhecida: %s", buffer);
+            return;
         }
+    }  
 }
+        
 
 int main(){
     ListaDeLinhas entrada;
