@@ -214,7 +214,17 @@ void processarTransicoes(AFD *afd, char *estadoAtual, char simbolo, char *estado
             return 1; // Sucesso
         }
     }
-    return 0;}
+    return 0;
+}
+
+int ehEstadoFinal(AFD *afd, char *estado) {
+    for(int i=0; i < afd->qtd_finais; i++) {
+        if(strcmp(afd->estados_finais[i], estado) == 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
 
 int main(){
     ListaDeLinhas entrada;
