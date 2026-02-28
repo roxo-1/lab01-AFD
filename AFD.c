@@ -27,11 +27,21 @@ typedef struct{
 
 typedef struct{
     char alfabeto[MAX_ALFABETO][TAM_ALFABETO];
+    int qtd_alfabeto;
+
     char estados[MAX_ESTADOS][TAM_ESTADOS];
-    char estado_inicial[MAX_ESTADOS][TAM_ESTADOS];
+    int qtd_estados;
+
+    char estado_inicial[TAM_ESTADOS]; // Apenas 1 estado inicial
+
     char estados_finais[MAX_ESTADOS][TAM_ESTADOS];
+    int qtd_finais;
+
     char transicoes[MAX_TRANSICOES][TAM_TRANSICOES];
+    int qtd_transicoes;
+
     char palavras[MAX_PALAVRAS][TAM_PALAVRAS];
+    int qtd_palavras;
 }AFD;
 
 //Função que lê o arquivo, ignora as linhas com '#' e armazena as outras no struct
@@ -64,32 +74,119 @@ void imprimeLinhas(ListaDeLinhas *lista){
     }
 }
 
-processararAFD(ListaDeLinhas *lista, AFD *afd){
+void processararAFD(ListaDeLinhas *lista, AFD *afd){
+    // Inicializa os contadores
+    afd->qtd_alfabeto = 0;
+    afd->qtd_estados = 0;
+    afd->qtd_finais = 0;
+    afd->qtd_transicoes = 0;
+    afd->qtd_palavras = 0;
     char buffer[TAM_LINHAS];
-    while(fgets(buffer, TAM_LINHAS, lista) != NULL){
-        if(buffer[0]=='A'){
-            strcpy(afd->alfabeto,buffer);
-        }else if(buffer[0]=='Q'){
-            strcpy(afd->estados,buffer);
-        }else if(buffer[0]=='q'){
-            afd->estado_inicial = buffer[0];
-        }else if(buffer[0]=='F'){
-            strcpy(afd->estados_finais,buffer);
-        }else if(buffer[0]=='T'){
-            strcpy(afd->transicoes,buffer); 
-        }else if(buffer[0]=='P'){
-            strcpy(afd->palavras,buffer);
-        } else{
-            printf("Linha não reconhecida: %s", buffer);
-            return;
-        }
-    }  
-}
+    
+    for(int i=0; i<lista->qtd; i++){
+        strcpy(buffer, lista->texto[i]);
         
+        // Delimitadores: espaço, quebra de linha e tabulação
+        char *token = strtok(buffer, " \r\n"); 
+        
+        if(token == NULL) continue;
+
+        if(strcmp(token, "A") == 0) { // [cite: 22]
+            token = strtok(NULL, " \r\n"); 
+            while(token != NULL) {
+                strcpy(afd->alfabeto[afd->qtd_alfabeto], token);
+                afd->qtd_alfabeto++;
+                token = strtok(NULL, " \r\n"); // Correção: continua buscando por espaço
+            }
+        } 
+        else if(strcmp(token, "Q") == 0) { // [cite: 23]
+            token = strtok(NULL, " \r\n"); 
+            while(token != NULL) {
+                strcpy(afd->estados[afd->qtd_estados], token);
+                afd->qtd_estados++;
+                token = strtok(NULL, " \r\n");
+            }
+        }
+        else if(strcmp(token, "q") == 0) { // [cite: 24]
+            token = strtok(NULL, " \r\n");
+            if(token != NULL) {
+                strcpy(afd->estado_inicial, token);
+            }
+        }
+        else if(strcmp(token, "F") == 0) { // [cite: 25]
+            token = strtok(NULL, " \r\n"); 
+            while(token != NULL) {
+                strcpy(afd->estados_finais[afd->qtd_finais], token);
+                afd->qtd_finais++;
+                token = strtok(NULL, " \r\n");
+            }
+        }
+        else if(strcmp(token, "T") == 0) { // 
+            // Para transições, vamos guardar os tokens seguintes como uma string única ou processar
+            // Vamos assumir formato: T Origem Simbolo Destino
+            char t_origem[50], t_simb[50], t_dest[50];
+            
+            char *p1 = strtok(NULL, " \r\n");
+            char *p2 = strtok(NULL, " \r\n");
+            char *p3 = strtok(NULL, " \r\n");
+
+            if (p1 && p2 && p3) {
+                // Formata padronizado na struct: "Origem Simbolo Destino"
+                sprintf(afd->transicoes[afd->qtd_transicoes], "%s %s %s", p1, p2, p3);
+                afd->qtd_transicoes++;
+            }
+        }
+        else if(strcmp(token, "P") == 0) { // [cite: 27]
+            token = strtok(NULL, " \r\n");
+            while(token != NULL) {
+                strcpy(afd->palavras[afd->qtd_palavras], token);
+                afd->qtd_palavras++;
+                token = strtok(NULL, " \r\n");
+            }
+        }
+    }
+}
+
+void imprimeAFD(AFD *afd){
+    printf("Alfabeto (%d): ", afd->qtd_alfabeto);
+    for(int i=0; i<afd->qtd_alfabeto; i++) printf("%s, ", afd->alfabeto[i]);
+    printf("\n");
+
+    printf("Estados (%d): ", afd->qtd_estados);
+    for(int i=0; i<afd->qtd_estados; i++) printf("%s, ", afd->estados[i]);
+    printf("\n");
+
+    printf("Estado Inicial: [%s]\n", afd->estado_inicial);
+
+    printf("Estados Finais (%d): ", afd->qtd_finais);
+    for(int i=0; i<afd->qtd_finais; i++) printf("%s, ", afd->estados_finais[i]);
+    printf("\n");
+    
+    printf("Transicoes (%d): ", afd->qtd_transicoes);
+    for(int i=0; i<afd->qtd_transicoes; i++) printf("%s, ", afd->transicoes[i]);
+    printf("\n");
+
+    printf("Palavras (%d): ", afd->qtd_palavras);
+    for(int i=0; i<afd->qtd_palavras; i++) printf("%s, ", afd->palavras[i]);
+    printf("\n");
+}
+
+void processarPalavras(AFD *afd){
+    // Aqui você pode implementar a lógica para processar as palavras usando o AFD
+    // Isso envolveria criar uma função que simula o AFD para cada palavra, verificando se ela é aceita ou rejeitada com base nas transições e estados finais.
+}
+
+void processarTransicoes(AFD *afd){
+    // Aqui você pode implementar a lógica para processar as transições do AFD
+    // Isso envolveria criar uma estrutura de dados para armazenar as transições de forma eficiente, como uma tabela de transição, e depois usar essa tabela para simular o comportamento do AFD.
+}
 
 int main(){
     ListaDeLinhas entrada;
+    AFD afd;
     carregarArquivo("entradaAFD.txt", &entrada);
-    imprimeLinhas(&entrada);
+    //imprimeLinhas(&entrada);
+    processararAFD(&entrada, &afd);
+    imprimeAFD(&afd);
     return 0;
 }
