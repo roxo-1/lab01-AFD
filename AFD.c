@@ -230,7 +230,7 @@ void processarPalavras(AFD *afd){
 int main(){
     ListaDeLinhas entrada;
     AFD afd;
-    carregarArquivo("entradaAFD.txt", &entrada);
+    carregarArquivo("e2.txt", &entrada);
     //imprimeLinhas(&entrada);
     processararAFD(&entrada, &afd);
     //imprimeAFD(&afd);
