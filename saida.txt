@@ -1,0 +1,5 @@
+M aceita a palavra <a>
+M rejeita a palavra <b>
+M aceita a palavra <aba>
+M aceita a palavra <bbbba>
+M rejeita a palavra <abab>

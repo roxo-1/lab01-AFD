@@ -200,7 +200,12 @@ int ehEstadoFinal(AFD *afd, char *estado) {
     return 0;
 }
 
-void processarPalavras(AFD *afd){
+void processarPalavras(AFD *afd, const char *fileSaida) {
+    FILE *file = fopen(fileSaida, "w");
+    if (file == NULL) {
+        printf("Erro: Nao foi possivel criar o arquivo de saida.\n");
+        return; 
+    }
     for(int i=0; i < afd->qtd_palavras; i++) {
         char estadoAtual[TAM_ESTADOS];
         strcpy(estadoAtual, afd->estado_inicial); // Começa no estado inicial [cite: 9]
@@ -219,21 +224,24 @@ void processarPalavras(AFD *afd){
         // Ao final da palavra, verifica se parou em um estado final
         if(!rejeitada && ehEstadoFinal(afd, estadoAtual)) {
             // Formato de saída exigido no PDF 
-            printf("M aceita a palavra <%s>\n", palavra);
+            fprintf(file, "M aceita a palavra <%s>\n", palavra);
         } else {
-            printf("M rejeita a palavra <%s>\n", palavra);
+            fprintf(file, "M rejeita a palavra <%s>\n", palavra);
         }
     }
+    fclose(file);
 }
 
 
 int main(){
     ListaDeLinhas entrada;
     AFD afd;
+    const char *file = "saida.txt";
     carregarArquivo("e2.txt", &entrada);
     //imprimeLinhas(&entrada);
     processararAFD(&entrada, &afd);
     //imprimeAFD(&afd);
-    processarPalavras(&afd);
+    // file = fopen("saida.txt", "w");
+    processarPalavras(&afd, file);
     return 0;
 }
