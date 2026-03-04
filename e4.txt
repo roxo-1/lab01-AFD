@@ -1,0 +1,26 @@
+# Automato Finito Determinístico
+# Este automato detecta strings que começam com "ab"
+# L(G) = ab (a|b)*
+# Alfabeto:
+A a b
+# Estados:
+Q Q0 Q1 Q2 ERRO
+# Estado Inicial:
+q Q0
+# Estados Finais:
+F Q2
+# Transições
+T Q0 a Q1
+T Q0 b ERRO
+T Q1 a ERRO
+T Q1 b Q2
+T Q2 a Q2
+T Q2 b Q2
+T ERRO a ERRO
+T ERRO b ERRO
+# Palavras
+P ab
+P aba
+P abbba
+P a
+P ba

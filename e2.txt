@@ -1,0 +1,22 @@
+# Automato Finito Determinístico
+# Este automato detecta qualquer string terminada em "a"
+# L(G) = (a|b)* a
+# Alfabeto:
+A a b
+# Estados:
+Q S0 S1
+# Estado Inicial:
+q S0
+# Estados Finais:
+F S1
+# Transições
+T S0 a S1
+T S0 b S0
+T S1 a S1
+T S1 b S0
+# Palavras
+P a
+P b
+P aba
+P bbbba
+P abab

@@ -1,0 +1,21 @@
+# Automato Finito Determinístico
+# Este automato detecta strings com um número par de 'a's
+# Alfabeto:
+A a b
+# Estados:
+Q PAR IMPAR
+# Estado Inicial:
+q PAR
+# Estados Finais:
+F PAR
+# Transições
+T PAR a IMPAR
+T PAR b PAR
+T IMPAR a PAR
+T IMPAR b IMPAR
+# Palavras
+P aa
+P baab
+P bbb
+P a
+P aba

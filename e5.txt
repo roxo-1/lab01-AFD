@@ -1,0 +1,26 @@
+# Automato Finito Determinístico
+# Este automato detecta qualquer string contendo "101"
+# L(G) = (0|1)* 101 (0|1)*
+# Alfabeto:
+A 0 1
+# Estados:
+Q A B C D
+# Estado Inicial:
+q A
+# Estados Finais:
+F D
+# Transições
+T A 0 A
+T A 1 B
+T B 0 C
+T B 1 B
+T C 0 A
+T C 1 D
+T D 0 D
+T D 1 D
+# Palavras
+P 101
+P 0010100
+P 111011
+P 1001
+P 110
